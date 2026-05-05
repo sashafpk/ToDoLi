@@ -1,10 +1,10 @@
-/* ===== FONT ===== */
+/* FONT */
 @font-face {
   font-family: 'CatComic';
   src: url('./assets/fonts/Cat-Comic.ttf') format('truetype');
 }
 
-/* ===== RESET ===== */
+/*  RESET  */
 * {
   box-sizing: border-box;
 }
@@ -22,7 +22,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== PAGE ===== */
+/*  PAGE  */
 .page {
   min-height: 100vh;
   width: 100%;
@@ -31,7 +31,7 @@ body {
   color: #17506b;
 }
 
-/* ===== HEADER ===== */
+/*  HEADER  */
 .header {
   display: flex;
   justify-content: center;
@@ -56,7 +56,7 @@ body {
   animation: titlePop 0.55s ease both;
 }
 
-/* ===== TITLE ===== */
+/*  TITLE  */
 h1 {
   font-size: clamp(62px, 8vw, 105px);
   line-height: 0.95;
@@ -86,7 +86,7 @@ h1 {
   animation-delay: 0.45s;
 }
 
-/* ===== ADD FORM ===== */
+/*  ADD FORM  */
 .add-form {
   width: 100%;
   display: flex;
@@ -154,7 +154,7 @@ h1 {
   box-shadow: 0 3px 0 #174d68;
 }
 
-/* ===== DATEPICKER ===== */
+/*  DATEPICKER  */
 .react-datepicker-popper,
 .date-picker-popper {
   z-index: 99999 !important;
@@ -221,7 +221,7 @@ h1 {
   display: none;
 }
 
-/* ===== BOARD ===== */
+/*  BOARD  */
 .board {
   width: 100%;
   display: grid;
@@ -231,7 +231,7 @@ h1 {
   z-index: 1;
 }
 
-/* ===== COLUMN ===== */
+/*  COLUMN  */
 .column {
   min-height: clamp(360px, 56vh, 620px);
   border-radius: 40px;
@@ -266,7 +266,7 @@ h1 {
     6px 6px 0 rgba(0,0,0,0.2);
 }
 
-/* ===== TASK CARD ===== */
+/*  TASK CARD  */
 .task-card {
   color: #123f55;
   padding: 16px 18px;
@@ -359,7 +359,7 @@ h1 {
   color: #b45309;
 }
 
-/* ===== CHECKBOX ===== */
+/*  CHECKBOX  */
 .task-card input[type="checkbox"] {
   appearance: none;
   width: 22px;
@@ -386,7 +386,7 @@ h1 {
   left: 2px;
 }
 
-/* ===== FADE IN ===== */
+/*  FADE IN  */
 .fade-in {
   opacity: 0;
   animation: fadeIn 0.6s ease forwards;
@@ -407,7 +407,7 @@ h1 {
   animation-delay: 0.6s;
 }
 
-/* ===== ANIMATIONS ===== */
+/*  ANIMATIONS  */
 @keyframes popIn {
   0% {
     opacity: 0;
@@ -466,7 +466,7 @@ h1 {
   }
 }
 
-/* ===== FOOTER ===== */
+/*  FOOTER  */
 footer {
   text-align: center;
   margin-top: 70px;
@@ -475,7 +475,7 @@ footer {
   color: #2e6f73;
 }
 
-/* ===== RESPONSIVE ===== */
+/*  RESPONSIVE  */
 @media (max-width: 850px) {
   .page {
     padding: 28px 18px;

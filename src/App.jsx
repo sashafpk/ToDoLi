@@ -4,10 +4,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
+  const API_URL = "http://168.110.195.228:3001";
+
+  const [tasks, setTasks] = useState([]);
   const [taskName, setTaskName] = useState("");
   const [deadline, setDeadline] = useState(null);
   const [newTaskId, setNewTaskId] = useState(null);
@@ -20,38 +19,79 @@ function App() {
     return `${year}-${month}-${day}`;
   }
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
   const todayDate = formatDate(new Date());
+
+  useEffect(() => {
+    fetch(`${API_URL}/tasks`)
+      .then((res) => res.json())
+      .then((data) => {
+        const formattedTasks = data.map((task) => ({
+          ...task,
+          done: Boolean(task.done),
+          deadline: task.deadline?.split("T")[0] || task.deadline,
+        }));
+
+        setTasks(formattedTasks);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   function addTask() {
     if (taskName.trim() === "" || deadline === null) return;
 
     const newTask = {
-      id: Date.now(),
       name: taskName,
       deadline: formatDate(deadline),
-      done: false,
     };
 
-    setTasks([...tasks, newTask]);
-    setNewTaskId(newTask.id);
-    setTaskName("");
-    setDeadline(null);
+    fetch(`${API_URL}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTask),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const formattedTask = {
+          ...data,
+          done: Boolean(data.done),
+          deadline: data.deadline?.split("T")[0] || data.deadline,
+        };
 
-    setTimeout(() => {
-      setNewTaskId(null);
-    }, 400);
+        setTasks([formattedTask, ...tasks]);
+        setNewTaskId(formattedTask.id);
+        setTaskName("");
+        setDeadline(null);
+
+        setTimeout(() => {
+          setNewTaskId(null);
+        }, 400);
+      })
+      .catch((err) => console.log(err));
   }
 
   function toggleDone(id) {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task
-      )
-    );
+    const selectedTask = tasks.find((task) => task.id === id);
+    if (!selectedTask) return;
+
+    const newDoneStatus = !selectedTask.done;
+
+    fetch(`${API_URL}/tasks/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ done: newDoneStatus }),
+    })
+      .then(() => {
+        setTasks(
+          tasks.map((task) =>
+            task.id === id ? { ...task, done: newDoneStatus } : task
+          )
+        );
+      })
+      .catch((err) => console.log(err));
   }
 
   const todayTasks = tasks.filter(
@@ -65,10 +105,8 @@ function App() {
   const doneTasks = tasks.filter((task) => task.done);
 
   function getStatus(task) {
-    const today = new Date().toISOString().split("T")[0];
-
-    if (task.deadline < today && !task.done) return "late";
-    if (task.deadline === today && !task.done) return "today";
+    if (task.deadline < todayDate && !task.done) return "late";
+    if (task.deadline === todayDate && !task.done) return "today";
     return "";
   }
 
